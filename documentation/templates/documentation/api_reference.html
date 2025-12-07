@@ -1,0 +1,176 @@
+{% extends 'documentation/base.html' %}
+
+{% block title %}API Reference - Zepto Seller Center{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h2>API Reference</h2>
+    
+    <p>Complete reference for all REST and SOAP API endpoints in the Zepto Seller Center.</p>
+    
+    <div class="alert alert-info">
+        <strong>Base URL:</strong> <code>{{ base_url }}</code>
+    </div>
+</div>
+
+{% for app in apps %}
+<div class="content">
+    <h2>{{ app.name }} API</h2>
+    <p>{{ app.description }}</p>
+    
+    <h3>REST API Endpoints</h3>
+    <div class="endpoint-card">
+        <h4>Base Endpoint</h4>
+        <p><code>{{ app.rest_endpoint }}</code></p>
+        
+        <h4>Available Operations</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge badge-feature">GET</span></td>
+                    <td><code>{{ app.rest_endpoint }}</code></td>
+                    <td>List all {{ app.name|lower }}</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-enhancement">POST</span></td>
+                    <td><code>{{ app.rest_endpoint }}</code></td>
+                    <td>Create a new {{ app.name|lower|slice:":1" }}</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-feature">GET</span></td>
+                    <td><code>{{ app.rest_endpoint }}{id}/</code></td>
+                    <td>Retrieve specific {{ app.name|lower|slice:":1" }}</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-enhancement">PUT</span></td>
+                    <td><code>{{ app.rest_endpoint }}{id}/</code></td>
+                    <td>Update {{ app.name|lower|slice:":1" }} (full)</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-enhancement">PATCH</span></td>
+                    <td><code>{{ app.rest_endpoint }}{id}/</code></td>
+                    <td>Update {{ app.name|lower|slice:":1" }} (partial)</td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-breaking">DELETE</span></td>
+                    <td><code>{{ app.rest_endpoint }}{id}/</code></td>
+                    <td>Delete {{ app.name|lower|slice:":1" }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <h3>SOAP API Endpoint</h3>
+    <div class="endpoint-card">
+        <p><code>{{ app.soap_endpoint }}</code></p>
+        <p>Access the WSDL by making a GET request to the SOAP endpoint.</p>
+        
+        <h4>Example SOAP Request</h4>
+        <pre><code>curl {{ base_url }}{{ app.soap_endpoint }}</code></pre>
+    </div>
+    
+    <h3>Data Models</h3>
+    <ul style="margin-left: 30px; margin-top: 10px;">
+        {% for model in app.models %}
+        <li><code>{{ model }}</code></li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Example REST Request</h3>
+    <pre><code># List all {{ app.name|lower }}
+curl -X GET {{ base_url }}{{ app.rest_endpoint }}
+
+# Create new {{ app.name|lower|slice:":1" }}
+curl -X POST {{ base_url }}{{ app.rest_endpoint }} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "field1": "value1",
+    "field2": "value2"
+  }'
+
+# Get specific {{ app.name|lower|slice:":1" }}
+curl -X GET {{ base_url }}{{ app.rest_endpoint }}1/
+
+# Update {{ app.name|lower|slice:":1" }}
+curl -X PATCH {{ base_url }}{{ app.rest_endpoint }}1/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "field1": "new_value"
+  }'
+
+# Delete {{ app.name|lower|slice:":1" }}
+curl -X DELETE {{ base_url }}{{ app.rest_endpoint }}1/</code></pre>
+</div>
+{% endfor %}
+
+<div class="content">
+    <h2>Response Format</h2>
+    
+    <h3>REST API Responses</h3>
+    <p>All REST API responses are in JSON format with the following structure:</p>
+    
+    <h4>List Response (Paginated)</h4>
+    <pre><code>{
+    "count": 100,
+    "next": "http://api.example.com/products/api/?page=2",
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "field1": "value1",
+            "field2": "value2",
+            ...
+        }
+    ]
+}</code></pre>
+    
+    <h4>Detail Response</h4>
+    <pre><code>{
+    "id": 1,
+    "field1": "value1",
+    "field2": "value2",
+    "created_at": "2024-01-01T12:00:00Z",
+    "updated_at": "2024-01-01T12:00:00Z"
+}</code></pre>
+    
+    <h4>Error Response</h4>
+    <pre><code>{
+    "error": "Error message describing what went wrong"
+}</code></pre>
+    
+    <h3>SOAP API Responses</h3>
+    <p>SOAP responses are in XML format following SOAP envelope structure:</p>
+    <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+    &lt;soap:Body&gt;
+        &lt;Response&gt;
+            &lt;result&gt;Success message or data&lt;/result&gt;
+        &lt;/Response&gt;
+    &lt;/soap:Body&gt;
+&lt;/soap:Envelope&gt;</code></pre>
+</div>
+
+<div class="content">
+    <h2>Authentication</h2>
+    
+    <div class="alert alert-warning">
+        <strong>Development Mode:</strong> The API is currently configured with <code>AllowAny</code> permissions for development. 
+        For production deployment, implement proper authentication (JWT, OAuth2, etc.).
+    </div>
+    
+    <p>Supported authentication methods (for production):</p>
+    <ul style="margin-left: 30px; margin-top: 10px;">
+        <li>Session Authentication</li>
+        <li>Basic Authentication</li>
+        <li>Token Authentication (can be added)</li>
+        <li>OAuth2 (can be added)</li>
+    </ul>
+</div>
+{% endblock %}
