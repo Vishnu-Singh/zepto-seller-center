@@ -1,0 +1,104 @@
+{% extends 'documentation/base.html' %}
+
+{% block title %}Home - Zepto Seller Center Documentation{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h2>Welcome to Zepto Seller Center Documentation</h2>
+    
+    <p>This documentation provides comprehensive information about the Zepto Seller Center API, including setup instructions, API references, and changelog.</p>
+    
+    <div class="alert alert-info">
+        <strong>Current Version:</strong> 
+        {% if latest_version %}
+            {{ latest_version.version }} (Released: {{ latest_version.release_date }})
+        {% else %}
+            No version information available
+        {% endif %}
+    </div>
+    
+    <h3>Quick Links</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+        <div class="card">
+            <h4 style="color: #667eea;">🚀 Getting Started</h4>
+            <p>Learn how to set up and configure the Zepto Seller Center.</p>
+            <a href="{% url 'documentation:setup' %}" style="color: #667eea;">View Setup Guide →</a>
+        </div>
+        
+        <div class="card">
+            <h4 style="color: #667eea;">📚 API Reference</h4>
+            <p>Complete reference for all REST and SOAP API endpoints.</p>
+            <a href="{% url 'documentation:api-reference' %}" style="color: #667eea;">View API Docs →</a>
+        </div>
+        
+        <div class="card">
+            <h4 style="color: #667eea;">📝 Changelog</h4>
+            <p>Track all API changes, updates, and new features.</p>
+            <a href="{% url 'documentation:changelog' %}" style="color: #667eea;">View Changelog →</a>
+        </div>
+    </div>
+</div>
+
+<div class="content">
+    <h2>Project Overview</h2>
+    
+    <p>Zepto Seller Center is a comprehensive Django-based API system designed for managing seller operations. The project includes:</p>
+    
+    <ul style="margin-left: 30px; margin-top: 15px;">
+        <li><strong>6 Domain-Specific Apps:</strong> Products, Orders, Inventory, Shipping, Finance, Reports</li>
+        <li><strong>11 Database Models:</strong> Covering all aspects of seller operations</li>
+        <li><strong>REST APIs:</strong> Full CRUD operations with pagination</li>
+        <li><strong>SOAP APIs:</strong> WSDL-compliant endpoints for legacy integration</li>
+        <li><strong>Admin Panels:</strong> Complete Django admin interfaces</li>
+        <li><strong>Comprehensive Tests:</strong> 30+ unit tests ensuring reliability</li>
+    </ul>
+</div>
+
+{% if recent_changes %}
+<div class="content">
+    <h2>Recent Changes</h2>
+    
+    {% for change in recent_changes %}
+    <div class="endpoint-card">
+        <h4>
+            <span class="badge badge-{{ change.change_type }}">{{ change.get_change_type_display }}</span>
+            {{ change.title }}
+        </h4>
+        <p><strong>Version:</strong> {{ change.version.version }} | <strong>App:</strong> {{ change.app_name }} | <strong>Endpoint:</strong> <code>{{ change.endpoint }}</code></p>
+        <p>{{ change.description }}</p>
+    </div>
+    {% endfor %}
+    
+    <p style="margin-top: 20px;">
+        <a href="{% url 'documentation:changelog' %}" style="color: #667eea;">View complete changelog →</a>
+    </p>
+</div>
+{% endif %}
+
+{% if setup_guides %}
+<div class="content">
+    <h2>Featured Setup Guides</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Guide Title</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for guide in setup_guides %}
+            <tr>
+                <td>{{ guide.title }}</td>
+                <td><span class="badge badge-feature">{{ guide.get_guide_type_display }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <p>
+        <a href="{% url 'documentation:setup' %}" style="color: #667eea;">View all setup guides →</a>
+    </p>
+</div>
+{% endif %}
+{% endblock %}

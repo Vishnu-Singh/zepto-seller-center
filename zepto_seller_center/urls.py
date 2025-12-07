@@ -25,6 +25,10 @@ def api_root(request):
         'message': 'Welcome to Zepto Seller Center API',
         'version': '1.0',
         'endpoints': {
+            'documentation': {
+                'url': '/docs/',
+                'description': 'Interactive documentation, setup guides, and API reference'
+            },
             'products': {
                 'rest_api': '/products/api/',
                 'soap_api': '/products/soap/',
@@ -63,6 +67,7 @@ def api_root(request):
 urlpatterns = [
     path('', api_root, name='api-root'),
     path('admin/', admin.site.urls),
+    path('docs/', include('documentation.urls')),
     path('products/', include('products.urls')),
     path('orders/', include('orders.urls')),
     path('inventory/', include('inventory.urls')),

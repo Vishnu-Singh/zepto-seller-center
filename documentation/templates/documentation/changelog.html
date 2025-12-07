@@ -1,0 +1,110 @@
+{% extends 'documentation/base.html' %}
+
+{% block title %}Changelog - Zepto Seller Center{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h2>API Changelog</h2>
+    
+    <p>Track all changes, updates, and new features across all API versions.</p>
+</div>
+
+{% if versions %}
+    {% for version in versions %}
+    <div class="content">
+        <h2>
+            Version {{ version.version }}
+            {% if version.is_active %}
+            <span class="badge badge-feature">Current</span>
+            {% endif %}
+        </h2>
+        
+        <p><strong>Release Date:</strong> {{ version.release_date }}</p>
+        <p>{{ version.description }}</p>
+        
+        {% if version.changes.all %}
+        <h3>Changes in this Version</h3>
+        
+        {% for change in version.changes.all %}
+        <div class="endpoint-card">
+            <h4>
+                <span class="badge badge-{{ change.change_type }}">{{ change.get_change_type_display }}</span>
+                {{ change.title }}
+            </h4>
+            
+            <p>
+                <strong>App:</strong> {{ change.app_name }} | 
+                <strong>Endpoint:</strong> <code>{{ change.endpoint }}</code>
+            </p>
+            
+            <p>{{ change.description }}</p>
+            
+            <p style="color: #999; font-size: 0.9em;">
+                <em>Added on {{ change.created_at|date:"F j, Y" }}</em>
+            </p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p style="color: #999;">No changes documented for this version.</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+<div class="content">
+    <div class="alert alert-info">
+        <strong>No version information available.</strong> 
+        <p>API versions and changes can be added through the <a href="/admin/documentation/apiversion/" style="color: #084298;">admin panel</a>.</p>
+    </div>
+</div>
+{% endif %}
+
+<div class="content">
+    <h2>Change Type Legend</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-feature">New Feature</span></td>
+                <td>New functionality or endpoint added</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-enhancement">Enhancement</span></td>
+                <td>Improvement to existing functionality</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-bugfix">Bug Fix</span></td>
+                <td>Resolution of a reported issue</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-breaking">Breaking Change</span></td>
+                <td>Change that requires modifications to client code</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-deprecation">Deprecation</span></td>
+                <td>Feature or endpoint marked for future removal</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="content">
+    <h2>Programmatic Access</h2>
+    
+    <p>You can also access changelog information programmatically through these API endpoints:</p>
+    
+    <h3>Get All Versions</h3>
+    <pre><code>GET /docs/api/versions/</code></pre>
+    
+    <h3>Get Changes for Specific Version</h3>
+    <pre><code>GET /docs/api/changes/?version=v1.0.0</code></pre>
+    
+    <h3>Get All Recent Changes</h3>
+    <pre><code>GET /docs/api/changes/</code></pre>
+</div>
+{% endblock %}

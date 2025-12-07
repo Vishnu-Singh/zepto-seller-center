@@ -1,0 +1,201 @@
+{% extends 'documentation/base.html' %}
+
+{% block title %}Setup Guide - Zepto Seller Center{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h2>Setup & Installation Guide</h2>
+    
+    <p>Complete guide to setting up and configuring the Zepto Seller Center.</p>
+</div>
+
+<div class="content">
+    <h2>Prerequisites</h2>
+    
+    <ul style="margin-left: 30px;">
+        <li>Python 3.12 or higher</li>
+        <li>pip (Python package installer)</li>
+        <li>Git</li>
+        <li>SQLite (included with Python) or PostgreSQL (for production)</li>
+    </ul>
+</div>
+
+<div class="content">
+    <h2>Installation Steps</h2>
+    
+    <h3>1. Clone the Repository</h3>
+    <pre><code>git clone https://github.com/Vishnu-Singh/zepto-seller-center.git
+cd zepto-seller-center</code></pre>
+    
+    <h3>2. Install Dependencies</h3>
+    <pre><code>pip install -r requirements.txt</code></pre>
+    
+    <p>The following packages will be installed:</p>
+    <ul style="margin-left: 30px;">
+        <li>Django 6.0 - Web framework</li>
+        <li>djangorestframework 3.16.1 - REST API framework</li>
+        <li>django-cors-headers 4.9.0 - CORS handling</li>
+        <li>lxml 6.0.2 - XML processing for SOAP</li>
+        <li>defusedxml 0.7.1 - Secure XML parsing</li>
+    </ul>
+    
+    <h3>3. Run Database Migrations</h3>
+    <pre><code>python manage.py makemigrations
+python manage.py migrate</code></pre>
+    
+    <h3>4. Create Superuser (Admin Access)</h3>
+    <pre><code>python manage.py createsuperuser</code></pre>
+    
+    <p>Follow the prompts to create an admin account.</p>
+    
+    <h3>5. Start the Development Server</h3>
+    <pre><code>python manage.py runserver</code></pre>
+    
+    <p>The server will start at <code>http://localhost:8000/</code></p>
+</div>
+
+<div class="content">
+    <h2>Configuration</h2>
+    
+    <h3>Settings Overview</h3>
+    <p>Key configuration settings in <code>zepto_seller_center/settings.py</code>:</p>
+    
+    <h4>Installed Apps</h4>
+    <pre><code>INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'corsheaders',
+    'products',
+    'orders',
+    'inventory',
+    'shipping',
+    'finance',
+    'reports',
+    'documentation',
+]</code></pre>
+    
+    <h4>REST Framework Settings</h4>
+    <pre><code>REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # Development only
+    ],
+}</code></pre>
+    
+    <div class="alert alert-warning">
+        <strong>Security Note:</strong> The <code>AllowAny</code> permission is for development only. 
+        Change this to appropriate authentication for production.
+    </div>
+</div>
+
+<div class="content">
+    <h2>Testing</h2>
+    
+    <h3>Run All Tests</h3>
+    <pre><code>python manage.py test</code></pre>
+    
+    <h3>Run Tests for Specific App</h3>
+    <pre><code>python manage.py test products
+python manage.py test orders
+python manage.py test inventory</code></pre>
+    
+    <h3>Run Tests with Verbose Output</h3>
+    <pre><code>python manage.py test --verbosity=2</code></pre>
+</div>
+
+<div class="content">
+    <h2>Accessing the Application</h2>
+    
+    <h3>API Root</h3>
+    <p><a href="/" target="_blank">http://localhost:8000/</a> - API information and available endpoints</p>
+    
+    <h3>Admin Panel</h3>
+    <p><a href="/admin/" target="_blank">http://localhost:8000/admin/</a> - Django admin interface (requires superuser login)</p>
+    
+    <h3>Documentation</h3>
+    <p><a href="{% url 'documentation:home' %}" target="_blank">http://localhost:8000/docs/</a> - This documentation interface</p>
+    
+    <h3>REST API Endpoints</h3>
+    <ul style="margin-left: 30px;">
+        <li><a href="/products/api/" target="_blank">/products/api/</a> - Products API</li>
+        <li><a href="/orders/api/" target="_blank">/orders/api/</a> - Orders API</li>
+        <li><a href="/inventory/api/" target="_blank">/inventory/api/</a> - Inventory API</li>
+        <li><a href="/shipping/api/" target="_blank">/shipping/api/</a> - Shipping API</li>
+        <li><a href="/finance/api/transactions/" target="_blank">/finance/api/transactions/</a> - Finance API</li>
+        <li><a href="/reports/api/" target="_blank">/reports/api/</a> - Reports API</li>
+    </ul>
+</div>
+
+{% if installation_guides %}
+<div class="content">
+    <h2>Installation Guides</h2>
+    {% for guide in installation_guides %}
+    <div class="endpoint-card">
+        <h3>{{ guide.title }}</h3>
+        <div>{{ guide.content|linebreaks }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if configuration_guides %}
+<div class="content">
+    <h2>Configuration Guides</h2>
+    {% for guide in configuration_guides %}
+    <div class="endpoint-card">
+        <h3>{{ guide.title }}</h3>
+        <div>{{ guide.content|linebreaks }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if deployment_guides %}
+<div class="content">
+    <h2>Deployment Guides</h2>
+    {% for guide in deployment_guides %}
+    <div class="endpoint-card">
+        <h3>{{ guide.title }}</h3>
+        <div>{{ guide.content|linebreaks }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if troubleshooting_guides %}
+<div class="content">
+    <h2>Troubleshooting</h2>
+    {% for guide in troubleshooting_guides %}
+    <div class="endpoint-card">
+        <h3>{{ guide.title }}</h3>
+        <div>{{ guide.content|linebreaks }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="content">
+    <h2>Production Deployment Checklist</h2>
+    
+    <ul style="margin-left: 30px;">
+        <li>✓ Set <code>DEBUG = False</code> in settings.py</li>
+        <li>✓ Configure <code>ALLOWED_HOSTS</code></li>
+        <li>✓ Change <code>SECRET_KEY</code> to a secure value</li>
+        <li>✓ Use environment variables for sensitive data</li>
+        <li>✓ Switch to PostgreSQL or MySQL database</li>
+        <li>✓ Configure proper authentication (JWT, OAuth2)</li>
+        <li>✓ Restrict CORS to specific origins</li>
+        <li>✓ Use a production WSGI server (Gunicorn, uWSGI)</li>
+        <li>✓ Set up static file serving</li>
+        <li>✓ Enable HTTPS</li>
+        <li>✓ Configure logging and monitoring</li>
+        <li>✓ Set up database backups</li>
+    </ul>
+</div>
+{% endblock %}

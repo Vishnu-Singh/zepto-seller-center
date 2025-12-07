@@ -4,19 +4,22 @@ A full-featured Django application for managing Zepto seller operations with bot
 
 ## Features
 
-- **6 App Modules** based on API classifications:
+- **7 App Modules** based on API classifications:
   - **Products**: Product catalog management
   - **Orders**: Order processing and management
   - **Inventory**: Stock and warehouse management
   - **Shipping**: Logistics and shipment tracking
   - **Finance**: Transactions and payouts
   - **Reports**: Analytics and reporting
+  - **Documentation**: Interactive documentation with setup guides and API changelog
 
 - **Dual API Support**:
   - REST API (using Django REST Framework)
-  - SOAP API (using Spyne)
+  - SOAP API (using custom XML implementation)
 
 - **Admin Panel**: Full Django admin interface for each app
+
+- **Interactive Documentation**: Web-based documentation with setup guides, API reference, and changelog
 
 - **Comprehensive Tests**: Unit tests for all endpoints
 
@@ -39,15 +42,29 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-4. Create a superuser (for admin access):
+4. (Optional) Populate documentation data:
+```bash
+python manage.py populate_docs
+```
+
+5. Create a superuser (for admin access):
 ```bash
 python manage.py createsuperuser
 ```
 
-5. Run the development server:
+6. Run the development server:
 ```bash
 python manage.py runserver
 ```
+
+## Quick Access
+
+- **API Root**: http://localhost:8000/
+- **Documentation**: http://localhost:8000/docs/
+- **Admin Panel**: http://localhost:8000/admin/
+- **API Reference**: http://localhost:8000/docs/api-reference/
+- **Setup Guide**: http://localhost:8000/docs/setup/
+- **Changelog**: http://localhost:8000/docs/changelog/
 
 ## API Endpoints
 
